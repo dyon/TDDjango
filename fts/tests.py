@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 class PollTest(LiveServerTestCase):
+    fixtures = ['admin_user.json']
 
     def setUp(self):
         self.browser = webdriver.Firefox()

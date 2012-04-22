@@ -1,0 +1,20 @@
+[
+  {
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "admin", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": true, 
+      "is_staff": true, 
+      "last_login": "2012-04-22T13:56:18.601Z", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "pbkdf2_sha256$10000$T7RmHDYh6cbi$h3yg0/HlEjWjG+FTP4F3hMjuDvw4YKw/ZnE+ca4Ht88=", 
+      "email": "dyon@me.com", 
+      "date_joined": "2012-04-22T13:23:15.051Z"
+    }
+  }
+]
