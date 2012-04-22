@@ -1,5 +1,6 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
 class PollTest(LiveServerTestCase):
@@ -18,5 +19,21 @@ class PollTest(LiveServerTestCase):
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Django administration', body.text)
 
-        # TODO: use the admin site to create a poll
+        # She types in her username and password and hits return
+        username_field = self.browser.find_element_by_name('username')
+        username_field.send_keys('admin')
+
+        password_field = self.browser.find_element_by_name('password')
+        password_field.send_keys('admin')
+        password_field.send_keys(Keys.RETURN)
+
+        # Her username and password are accepted and she is taken to the Site Administration page
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Site administration', body.text)
+
+        # She now sees a couple of hyperlinks that say "Polls"
+        polls_links = self.browser.find_elements_by_link_text('Polls')
+        self.assertEquals(len(polls_links), 2)
+
+        # TODO: AJ uses the admin site to create a poll
         self.fail('finish this test')
