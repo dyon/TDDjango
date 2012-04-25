@@ -22,3 +22,8 @@ class PollModelTest(TestCase):
         # Check if it saved its two attributes: question and pub_date
         self.assertEquals(only_poll_in_database.question, "What's up?")
         self.assertEquals(only_poll_in_database.pub_date, poll.pub_date)
+
+    def test_verbose_name_for_pub_date(self):
+        for field in Poll._meta.fields:
+            if field.name == 'pub_date':
+                self.assertEquals(field.verbose_name, 'Date published')
