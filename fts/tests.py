@@ -32,9 +32,21 @@ class PollTest(LiveServerTestCase):
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Site administration', body.text)
 
-        # She now sees a couple of hyperlinks that say "Polls"
+        # She now sees a couple of hyperlinks named "Polls"
         polls_links = self.browser.find_elements_by_link_text('Polls')
         self.assertEquals(len(polls_links), 2)
 
-        # TODO: AJ uses the admin site to create a poll
-        self.fail('finish this test')
+        # She sees a link to add a new poll so she clicks it
+        new_poll_links = self.browser.find_elements_by_link_text('Add')
+
+        for link in new_poll_links:
+            if 'poll' in link.get_attribute('href'):
+                new_poll_link = link
+                break
+
+        new_poll_link.click()
+
+        # She sees some input fields for "Question" and "Publish date"
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Question:', body.text)
+        self.assertIn('Publish date:', body.text)
