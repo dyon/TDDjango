@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 from polls.models import Poll
 
+
 class PollModelTest(TestCase):
 
     def test_creating_a_new_poll_and_saving_it_to_the_database(self):
@@ -26,4 +27,4 @@ class PollModelTest(TestCase):
     def test_verbose_name_for_pub_date(self):
         for field in Poll._meta.fields:
             if field.name == 'pub_date':
-                self.assertEquals(field.verbose_name, 'Date published')
+                self.assertEquals(field.verbose_name, 'Publish date')
