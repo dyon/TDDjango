@@ -50,3 +50,21 @@ class PollTest(LiveServerTestCase):
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Question:', body.text)
         self.assertIn('Publish date:', body.text)
+
+        # She types in an interesting question for the poll
+        question_field = self.browser.find_element_by_name('question')
+        question_field.send_keys('How awesome is Test-Driven Development?')
+
+        # She sets the date and time of publication
+        date_field = self.browser.find_element_by_name('pub_date_0')
+        date_field.send_keys('01/01/12')
+        time_field = self.browser.find_element_by_name('pub_date_1')
+        time_field.send_keys('10:30')
+
+        # AJ clicks the save button
+        save_button = self.browser.find_element_by_css_selector("input[value='Save']")
+        save_button.click()
+
+        # She is returned to the "Polls" listing where she can see her new poll listed as a clickable link
+        new_poll_links = self.browser.find_elements_by_link_text('How awesome is Test-Driven Development?')
+        self.assertEquals(len(new_poll_links), 1)
