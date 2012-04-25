@@ -68,3 +68,6 @@ class PollTest(LiveServerTestCase):
         # She is returned to the "Polls" listing where she can see her new poll listed as a clickable link
         new_poll_links = self.browser.find_elements_by_link_text('How awesome is Test-Driven Development?')
         self.assertEquals(len(new_poll_links), 1)
+
+        # TODO: Finish the test
+        self.fail('Finish this test')
