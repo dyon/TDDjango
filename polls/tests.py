@@ -28,3 +28,8 @@ class PollModelTest(TestCase):
         for field in Poll._meta.fields:
             if field.name == 'pub_date':
                 self.assertEquals(field.verbose_name, 'Publish date')
+
+    def test_poll_objects_are_named_after_their_question(self):
+        p = Poll()
+        p.question = 'This question is a test?'
+        self.assertEquals(unicode(p), 'This question is a test?')
