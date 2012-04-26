@@ -7,3 +7,7 @@ class Poll(models.Model):
 
     def __unicode__(self):
         return self.question
+
+
+class Choice(object):
+    pass

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.utils import timezone
-from polls.models import Poll
+from polls.models import Choice, Poll
 
 
 class PollModelTest(TestCase):
@@ -33,3 +33,32 @@ class PollModelTest(TestCase):
         p = Poll()
         p.question = 'This question is a test?'
         self.assertEquals(unicode(p), 'This question is a test?')
+
+
+class ChoiceModelTest(TestCase):
+
+    def test_creating_some_choices_for_a_poll(self):
+        # Start by creating a new Poll object
+        poll = Poll()
+        poll.question = "What's up?"
+        poll.pub_date = timezone.now()
+        poll.save()
+
+        # Now we create a Choice object
+        choice = Choice()
+
+        # Link it to our poll
+        choice.poll = poll
+        choice.choice = 'Doing fine...'
+        choice.votes = 3
+        choice.save()
+
+        # Try retrieving from the database using the poll object's reverse lookup
+        poll_choices = poll.choice_set.all()
+        self.assertEquals(poll_choices.count(), 1)
+
+        # Finally, check that its attributes have been saved
+        choice_from_db = poll_choices[0]
+        self.assertEquals(choice_from_db, choice)
+        self.assertEquals(choice_from_db.choice, 'Doing fine...')
+        self.assertEquals(choice_from_db.votes, 3)
