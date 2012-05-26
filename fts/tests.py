@@ -1,6 +1,25 @@
+from collections import namedtuple
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
+PollInfo = namedtuple('PollInfo', ['question', 'choices'])
+POLL1 = PollInfo(
+    question='How awesome is Test-Driven Development?',
+    choices=[
+        'Very awesome',
+        'Quite awesome',
+        'Moderately awesome'
+    ],
+)
+POLL2 = PollInfo(
+    question='Which workshop treat do you prefer?',
+    choices=[
+        'Beer',
+        'Pizza',
+        'The Acquisition of Knowledge'
+    ],
+)
 
 
 class PollTest(LiveServerTestCase):
@@ -77,5 +96,52 @@ class PollTest(LiveServerTestCase):
         new_poll_links = self.browser.find_elements_by_link_text('How awesome is Test-Driven Development?')
         self.assertEquals(len(new_poll_links), 1)
 
-        # TODO: Finish the test
-        self.fail('Finish this test')
+        # Satisfied, she goes back to sleep
+
+    def _setup_polls_via_admin(self):
+        # AJ logs into the admin site
+        self.browser.get(self.live_server_url + '/admin/')
+
+        username_field = self.browser.find_element_by_name('username')
+        username_field.send_keys('admin')
+
+        password_field = self.browser.find_element_by_name('password')
+        password_field.send_keys('admin')
+        password_field.send_keys(Keys.RETURN)
+
+        # She has a number of polls to enter. For each one, she:
+        for poll_info in [POLL1, POLL2]:
+            # Follows the link to the Polls app and adds a new poll
+            self.browser.find_elements_by_link_text('Polls')[1].click()
+            self.browser.find_element_by_link_text('Add poll').click()
+
+            # Enters his name and uses the 'today' and 'now' buttons to set the publish date
+            question_field = self.browser.find_element_by_name('question')
+            question_field.send_keys(poll_info.question)
+            self.browser.find_element_by_link_text('Today').click()
+            self.browser.find_element_by_link_text('Now').click()
+
+            # Sees she can enter choices for the poll on this same page, so she does
+            for i, choice_text in enumerate(poll_info.choices):
+                choice_field = self.browser.find_element_by_name('choice_set-%d-choice' % i)
+                choice_field.send_keys(choice_text)
+
+            # Saves her new poll
+            save_button = self.browser.find_element_by_css_selector("input[value='Save']")
+            save_button.click()
+
+            # Is returned to the polls listing where she can see her new poll listed as a clickable link by its name
+            new_poll_links = self.browser.find_elements_by_link_text(poll_info.question)
+            self.assertEquals(len(new_poll_links), 1)
+
+            # She goes back to the root of the admin site
+            self.browser.get(self.live_server_url + '/admin/')
+
+        # She logs out of the admin site
+        self.browser.find_element_by_link_text('Log out').click()
+
+    def test_voting_on_a_new_poll(self):
+        # First, AJ logs into the admin site and creates a coupe of new polls and their response choices
+        self._setup_polls_via_admin()
+
+        self.fail('TODO')
